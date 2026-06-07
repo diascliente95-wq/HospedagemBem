@@ -37,6 +37,9 @@
             .transition-custom {
                 transition: all 0.3s ease;
             }
+            .form-input {
+                @apply w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+            }
         }
     </style>
 </head>
@@ -45,12 +48,17 @@
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-bold text-primary">HospedaBem</a>
-            <nav class="hidden md:flex gap-8">
+            <nav class="hidden md:flex gap-8 items-center">
                 <a href="#inicio" class="hover:text-primary transition-custom">Início</a>
                 <a href="#planos" class="hover:text-primary transition-custom">Planos</a>
                 <a href="#recursos" class="hover:text-primary transition-custom">Recursos</a>
-                <a href="#suporte" class="hover:text-primary transition-custom">Suporte</a>
+                <a href="#politicas" class="hover:text-primary transition-custom">Políticas</a>
                 <a href="#contato" class="hover:text-primary transition-custom">Contato</a>
+                <button id="btnEntrar" class="border border-primary text-primary px-5 py-2 rounded-lg hover:bg-primary/5 transition-custom">Entrar</button>
+                <button id="btnCadastrar" class="bg-primary text-white px-5 py-2 rounded-lg hover:bg-primary/90 transition-custom">Cadastrar-se</button>
+                <div id="areaClienteMenu" class="hidden">
+                    <a href="#area-cliente" class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-custom">Área do Cliente</a>
+                </div>
             </nav>
             <button class="md:hidden text-2xl" id="menuToggle">☰</button>
         </div>
@@ -60,11 +68,149 @@
                 <a href="#inicio" class="py-2 hover:text-primary">Início</a>
                 <a href="#planos" class="py-2 hover:text-primary">Planos</a>
                 <a href="#recursos" class="py-2 hover:text-primary">Recursos</a>
-                <a href="#suporte" class="py-2 hover:text-primary">Suporte</a>
+                <a href="#politicas" class="py-2 hover:text-primary">Políticas</a>
                 <a href="#contato" class="py-2 hover:text-primary">Contato</a>
+                <button id="btnEntrarMob" class="text-left py-2 hover:text-primary">Entrar</button>
+                <button id="btnCadastrarMob" class="text-left py-2 hover:text-primary">Cadastrar-se</button>
+                <div id="areaClienteMenuMob" class="hidden">
+                    <a href="#area-cliente" class="py-2 text-secondary font-semibold">Área do Cliente</a>
+                </div>
             </div>
         </div>
     </header>
+
+    <!-- Modais de Cadastro, Login e Área do Cliente -->
+    <!-- Modal Cadastro -->
+    <div id="modalCadastro" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold">Criar Sua Conta</h3>
+                <button onclick="fecharModal('modalCadastro')" class="text-gray-500 text-xl">&times;</button>
+            </div>
+            <form id="formCadastro" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nome Completo</label>
+                    <input type="text" id="cadNome" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">E-mail</label>
+                    <input type="email" id="cadEmail" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Telefone / WhatsApp</label>
+                    <input type="tel" id="cadTelefone" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Senha de Acesso</label>
+                    <input type="password" id="cadSenha" class="form-input" required minlength="6">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Confirmar Senha</label>
+                    <input type="password" id="cadConfSenha" class="form-input" required minlength="6">
+                </div>
+                <div class="text-sm text-gray-600">
+                    Ao se cadastrar você concorda com nossos <a href="#politicas" class="text-primary hover:underline">Termos e Política de Privacidade</a>.
+                </div>
+                <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-semibold transition-custom">
+                    Cadastrar e Criar Conta
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Login -->
+    <div id="modalLogin" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold">Acessar Minha Conta</h3>
+                <button onclick="fecharModal('modalLogin')" class="text-gray-500 text-xl">&times;</button>
+            </div>
+            <form id="formLogin" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">E-mail Cadastrado</label>
+                    <input type="email" id="logEmail" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Senha</label>
+                    <input type="password" id="logSenha" class="form-input" required>
+                </div>
+                <div class="text-right">
+                    <a href="#" class="text-sm text-primary hover:underline">Esqueceu sua senha?</a>
+                </div>
+                <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-semibold transition-custom">
+                    Entrar na Conta
+                </button>
+                <p class="text-center text-sm text-gray-600">
+                    Ainda não tem conta? <a href="#" id="irCadastro" class="text-primary font-medium hover:underline">Cadastre-se aqui</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Pagamento Pix (agora só para usuários logados) -->
+    <div id="modalPagamento" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="tituloPlano">Pagamento - Plano</h3>
+                <button onclick="fecharModal('modalPagamento')" class="text-gray-500 text-xl">&times;</button>
+            </div>
+            <p class="text-center mb-6">Escaneie o código Pix ou copie o código abaixo. Após confirmação, o plano será liberado diretamente em sua conta.</p>
+            <div class="flex justify-center mb-6">
+                <img src="https://picsum.photos/300/300" alt="QR Code Pix" class="rounded-lg border">
+            </div>
+            <div class="bg-gray-100 p-3 rounded-lg mb-6 flex justify-between items-center">
+                <span class="text-sm font-mono break-all" id="codigoPix">00020126360014BR.GOV.BCB.PIX0114exemplo@pix.com5204000053039865802BR5915HospedaBem6009SAO PAULO62140510exemplo1236304ABCD</span>
+                <button onclick="copiarCodigo()" class="text-primary"><i class="fa fa-copy"></i></button>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="fecharModal('modalPagamento')" class="w-1/2 bg-gray-200 hover:bg-gray-300 py-3 rounded-lg transition-custom">Cancelar</button>
+                <button onclick="confirmarPagamento()" class="w-1/2 bg-primary hover:bg-primary/90 text-white py-3 rounded-lg transition-custom">Confirmar Pagamento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Área do Cliente -->
+    <section id="area-cliente" class="py-16 bg-gray-50 hidden">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold mb-8">Olá, <span id="nomeUsuario"></span> 👋</h2>
+            <div class="bg-white rounded-xl shadow-card p-6 mb-8">
+                <h3 class="font-bold text-xl mb-4 text-primary">📋 Meus Planos e Acessos</h3>
+                <div id="semPlano" class="text-gray-600 italic">Você ainda não adquiriu nenhum plano. <a href="#planos" class="text-primary font-medium">Escolha um agora</a>.</div>
+                <div id="dadosPlano" class="hidden space-y-4">
+                    <div class="p-4 border border-secondary rounded-lg bg-secondary/5">
+                        <h4 class="font-semibold text-lg mb-2" id="nomePlanoAtivo"></h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li><strong>Status:</strong> <span class="text-green-600 font-medium">Ativo e Funcionando ✅</span></li>
+                            <li><strong>Validade / Próxima Renovação:</strong> <span id="dataValidade"></span></li>
+                            <li><strong>📡 Dados de Acesso ao Servidor:</strong></li>
+                            <li>• Servidor / IP: <span id="ipServidor"></span></li>
+                            <li>• Usuário de acesso: <span id="usuarioAcesso"></span></li>
+                            <li>• Senha temporária: <span id="senhaAcesso"></span></li>
+                            <li>• Link do Painel de Controle: <a href="#" id="linkPainel" class="text-primary hover:underline">Acessar Painel</a></li>
+                            <li><strong>💾 Recursos Disponíveis:</strong> <span id="recursosPlano"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="font-bold text-lg mb-3">👤 Meus Dados Cadastrais</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li><strong>Nome:</strong> <span id="dadoNome"></span></li>
+                        <li><strong>E-mail:</strong> <span id="dadoEmail"></span></li>
+                        <li><strong>Telefone:</strong> <span id="dadoTelefone"></span></li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="font-bold text-lg mb-3">💸 Histórico de Pagamentos</h3>
+                    <p id="historicoPagamentos" class="text-gray-600">Nenhum pagamento registrado ainda.</p>
+                </div>
+            </div>
+            <div class="mt-8 text-right">
+                <button id="btnSair" class="bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg hover:bg-red-100 transition-custom">Sair da Conta</button>
+            </div>
+        </div>
+    </section>
 
     <!-- Seção Início -->
     <section id="inicio" class="bg-gradient-to-br from-primary/10 via-white to-secondary/10 py-16 md:py-24">
@@ -86,7 +232,7 @@
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h2 class="text-[clamp(1.5rem,3vw,2.2rem)] font-bold mb-4">Escolha o Plano Ideal para Você</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Todos os planos incluem suporte técnico, painel de controle intuitivo e pagamento 100% via Pix, com liberação imediada após confirmação.</p>
+                <p class="text-gray-600 max-w-2xl mx-auto">Todos os planos incluem suporte técnico, painel de controle intuitivo e pagamento 100% via Pix — é necessário ter cadastro e estar logado para contratar.</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -105,7 +251,7 @@
                         <li><i class="fa fa-check-circle text-secondary mr-2"></i> Suporte das 8h às 18h</li>
                         <li><i class="fa fa-check-circle text-secondary mr-2"></i> Backup Semanal</li>
                     </ul>
-                    <button onclick="abrirPagamento('basico')" class="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-3 rounded-lg transition-custom">
+                    <button onclick="verificarLogin('basico')" class="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-3 rounded-lg transition-custom">
                         Assinar via Pix
                     </button>
                 </div>
@@ -127,7 +273,7 @@
                         <li><i class="fa fa-check-circle text-primary mr-2"></i> Backup Diário Automático</li>
                         <li><i class="fa fa-check-circle text-primary mr-2"></i> Banco de dados ilimitado</li>
                     </ul>
-                    <button onclick="abrirPagamento('intermediario')" class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-custom">
+                    <button onclick="verificarLogin('intermediario')" class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-custom">
                         Assinar via Pix
                     </button>
                 </div>
@@ -149,32 +295,13 @@
                         <li><i class="fa fa-check-circle text-indigo-600 mr-2"></i> Recursos dedicados</li>
                         <li><i class="fa fa-check-circle text-indigo-600 mr-2"></i> Instalação de aplicativos com 1 clique</li>
                     </ul>
-                    <button onclick="abrirPagamento('avancado')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-custom">
+                    <button onclick="verificarLogin('avancado')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-custom">
                         Assinar via Pix
                     </button>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Modal Pagamento Pix -->
-    <div id="modalPagamento" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden p-4">
-        <div class="bg-white rounded-xl max-w-md w-full p-6">
-            <h3 class="text-xl font-bold mb-4 text-center" id="tituloPlano">Pagamento - Plano</h3>
-            <p class="text-center mb-6">Escaneie o código Pix ou copie o código abaixo. Após confirmação, seu serviço será ativado automaticamente.</p>
-            <div class="flex justify-center mb-6">
-                <img src="https://picsum.photos/300/300" alt="QR Code Pix" class="rounded-lg border">
-            </div>
-            <div class="bg-gray-100 p-3 rounded-lg mb-6 flex justify-between items-center">
-                <span class="text-sm font-mono break-all" id="codigoPix">00020126360014BR.GOV.BCB.PIX0114exemplo@pix.com5204000053039865802BR5915HospedaBem6009SAO PAULO62140510exemplo1236304ABCD</span>
-                <button onclick="copiarCodigo()" class="text-primary"><i class="fa fa-copy"></i></button>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="fecharModal()" class="w-1/2 bg-gray-200 hover:bg-gray-300 py-3 rounded-lg transition-custom">Cancelar</button>
-                <button onclick="confirmarPagamento()" class="w-1/2 bg-primary hover:bg-primary/90 text-white py-3 rounded-lg transition-custom">Confirmar Pagamento</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Seção Recursos -->
     <section id="recursos" class="py-16 bg-gray-50">
@@ -248,10 +375,23 @@
                 <h3 class="font-bold text-xl mb-3 text-primary">💳 Política de Pagamentos e Reembolsos</h3>
                 <div class="text-gray-700 space-y-3 text-sm md:text-base">
                     <p><strong>Forma de Pagamento:</strong> Aceitamos exclusivamente pagamento via Pix, forma rápida, segura e fiscalmente regularizada. O valor é definido conforme o plano escolhido.</p>
-                    <p><strong>Confirmação e Liberação:</strong> Após identificação automática da transação, o sistema libera o acesso imediatamente, enviando todos os dados por e-mail cadastrado.</p>
+                    <p><strong>Confirmação e Liberação:</strong> Após identificação automática da transação, o sistema libera o acesso imediatamente, enviando todos os dados também para sua Área do Cliente.</p>
                     <p><strong>Reembolso:</strong> Nos primeiros 7 dias corridos após contratação, devolvemos integralmente o valor pago se solicitado por meio do canal oficial de atendimento. Após esse período, devoluções são analisadas caso a caso.</p>
                     <p><strong>Atraso:</strong> Pagamentos não efetuados até a data de vencimento geram aviso, depois suspensão e após 7 dias de suspensão, exclusão definitiva dos dados, sem obrigação de manter cópias.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Contato -->
+    <section id="contato" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 max-w-4xl text-center">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold mb-6">Entre em Contato Conosco</h2>
+            <p class="mb-8 text-gray-600">Tem dúvidas? Nossa equipe está pronta para ajudar!</p>
+            <div class="space-y-4 text-lg">
+                <p><i class="fa fa-envelope text-primary mr-3"></i> atendimento@hospedabem.com.br</p>
+                <p><i class="fa fa-whatsapp text-green-600 mr-3"></i> (91) 98888‑7777</p>
+                <p><i class="fa fa-map-marker text-red-500 mr-3"></i> Belém - Pará - Brasil</p>
             </div>
         </div>
     </section>
@@ -277,7 +417,7 @@
                     <h4 class="font-bold text-white mb-4">Contato</h4>
                     <ul class="space-y-2">
                         <li><i class="fa fa-envelope mr-2"></i> atendimento@hospedabem.com.br</li>
-                        <li><i class="fa fa-phone mr-2"></i> (91) 9XXXX-XXXX</li>
+                        <li><i class="fa fa-phone mr-2"></i> (91) 9XXXX‑XXXX</li>
                         <li><i class="fa fa-map-marker mr-2"></i> Belém - Pará - Brasil</li>
                     </ul>
                 </div>
@@ -294,19 +434,89 @@
 
     <!-- Scripts -->
     <script>
+        // Variáveis globais
+        let usuarioLogado = null;
+        let planoEscolhido = '';
+
         // Menu móvel
         const menuToggle = document.getElementById('menuToggle');
         const mobileMenu = document.getElementById('mobileMenu');
         menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-        // Fecha menu ao clicar no link
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        function fecharModal(idModal) {
+            document.getElementById(idModal).classList.add('hidden');
+        }
+
+        function abrirModal(idModal) {
+            document.getElementById(idModal).classList.remove('hidden');
+            mobileMenu.classList.add('hidden');
+        }
+
+        // Botões abrir modais
+        document.getElementById('btnCadastrar').addEventListener('click', () => abrirModal('modalCadastro'));
+        document.getElementById('btnCadastrarMob').addEventListener('click', () => abrirModal('modalCadastro'));
+        document.getElementById('btnEntrar').addEventListener('click', () => abrirModal('modalLogin'));
+        document.getElementById('btnEntrarMob').addEventListener('click', () => abrirModal('modalLogin'));
+        document.getElementById('irCadastro').addEventListener('click', (e) => {
+            e.preventDefault();
+            fecharModal('modalLogin');
+            abrirModal('modalCadastro');
         });
 
-        // Controle do modal de pagamento
-        const modal = document.getElementById('modalPagamento');
-        const tituloPlano = document.getElementById('tituloPlano');
+        // Cadastro
+        document.getElementById('formCadastro').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nome = document.getElementById('cadNome').value.trim();
+            const email = document.getElementById('cadEmail').value.trim();
+            const telefone = document.getElementById('cadTelefone').value.trim();
+            const senha = document.getElementById('cadSenha').value;
+            const confSenha = document.getElementById('cadConfSenha').value;
+
+            if(senha !== confSenha) return alert('⚠️ As senhas não coincidem!');
+
+            // Salva no navegador (em produção usar banco de dados)
+            const novoUsuario = { nome, email, telefone, senha, plano: null, dadosAcesso: null };
+            localStorage.setItem(`usuario_${email}`, JSON.stringify(novoUsuario));
+
+            alert('✅ Cadastro realizado com sucesso! Agora faça login para continuar.');
+            fecharModal('modalCadastro');
+            abrirModal('modalLogin');
+            this.reset();
+        });
+
+        // Login
+        document.getElementById('formLogin').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('logEmail').value.trim();
+            const senha = document.getElementById('logSenha').value;
+
+            const dadosSalvos = localStorage.getItem(`usuario_${email}`);
+            if(!dadosSalvos) return alert('❌ E-mail não cadastrado!');
+
+            const usuario = JSON.parse(dadosSalvos);
+            if(usuario.senha !== senha) return alert('❌ Senha incorreta!');
+
+            usuarioLogado = usuario;
+            alert(`✅ Bem-vindo(a), ${usuario.nome}!`);
+            fecharModal('modalLogin');
+            atualizarInterfaceLogado();
+            exibirAreaCliente();
+            this.reset();
+
+            // Se já tinha escolhido plano antes do login
+            if(planoEscolhido) abrirPagamento(planoEscolhido);
+        });
+
+        // Verifica se está logado antes de pagar
+        function verificarLogin(plano) {
+            planoEscolhido = plano;
+            if(!usuarioLogado) {
+                alert('ℹ️ Você precisa estar cadastrado e logado para contratar.');
+                abrirModal('modalLogin');
+                return;
+            }
+            abrirPagamento(plano);
+        }
 
         function abrirPagamento(plano) {
             const nomesPlanos = {
@@ -315,27 +525,111 @@
                 avancado: 'Plano Avançado - R$ 69,90/mês'
             };
             tituloPlano.textContent = `Pagamento - ${nomesPlanos[plano]}`;
-            modal.classList.remove('hidden');
-        }
-
-        function fecharModal() {
-            modal.classList.add('hidden');
+            abrirModal('modalPagamento');
         }
 
         function copiarCodigo() {
             const codigo = document.getElementById('codigoPix').textContent;
             navigator.clipboard.writeText(codigo);
-            alert('Código Pix copiado com sucesso!');
+            alert('✅ Código Pix copiado com sucesso!');
         }
 
         function confirmarPagamento() {
-            alert('Pagamento confirmado! Em instantes você receberá no seu e-mail todos os dados de acesso e configuração.');
-            fecharModal();
+            // Dados gerados automaticamente após confirmação
+            const dadosPlanos = {
+                basico: {
+                    nome: 'Plano Básico',
+                    valor: 'R$ 19,90/mês',
+                    validade: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR'),
+                    ip: 'servidor01.hospedabem.com.br',
+                    usuario: 'cliente_' + Math.floor(Math.random()*99999),
+                    senhaAcesso: Math.random().toString(36).slice(-8).toUpperCase(),
+                    linkPainel: 'https://painel.hospedabem.com.br',
+                    recursos: '10GB SSD • Transferência ilimitada • 1 domínio'
+                },
+                intermediario: {
+                    nome: 'Plano Intermediário',
+                    valor: 'R$ 39,90/mês',
+                    validade: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR'),
+                    ip: 'servidor02.hospedabem.com.br',
+                    usuario: 'cliente_' + Math.floor(Math.random()*99999),
+                    senhaAcesso: Math.random().toString(36).slice(-8).toUpperCase(),
+                    linkPainel: 'https://painel.hospedabem.com.br',
+                    recursos: '50GB SSD • Transferência ilimitada • Até 5 domínios'
+                },
+                avancado: {
+                    nome: 'Plano Avançado',
+                    valor: 'R$ 69,90/mês',
+                    validade: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR'),
+                    ip: 'servidor03.hospedabem.com.br',
+                    usuario: 'cliente_' + Math.floor(Math.random()*99999),
+                    senhaAcesso: Math.random().toString(36).slice(-8).toUpperCase(),
+                    linkPainel: 'https://painel.hospedabem.com.br',
+                    recursos: '150GB SSD • Domínios ilimitados • Recursos dedicados'
+                }
+            };
+
+            usuarioLogado.plano = dadosPlanos[planoEscolhido];
+            // Atualiza dados salvos
+            localStorage.setItem(`usuario_${usuarioLogado.email}`, JSON.stringify(usuarioLogado));
+
+            alert('✅ Pagamento confirmado! Plano ativado. Todos os dados já estão disponíveis em sua Área do Cliente e enviados por e-mail.');
+            fecharModal('modalPagamento');
+            exibirAreaCliente();
+            planoEscolhido = '';
         }
 
-        // Fecha modal clicando fora
-        modal.addEventListener('click', (e) => {
-            if(e.target === modal) fecharModal();
+        function atualizarInterfaceLogado() {
+            document.getElementById('btnEntrar').classList.add('hidden');
+            document.getElementById('btnCadastrar').classList.add('hidden');
+            document.getElementById('areaClienteMenu').classList.remove('hidden');
+            document.getElementById('btnEntrarMob').classList.add('hidden');
+            document.getElementById('btnCadastrarMob').classList.add('hidden');
+            document.getElementById('areaClienteMenuMob').classList.remove('hidden');
+        }
+
+        function exibirAreaCliente() {
+            document.getElementById('area-cliente').classList.remove('hidden');
+            document.getElementById('nomeUsuario').textContent = usuarioLogado.nome.split(' ')[0];
+            document.getElementById('dadoNome').textContent = usuarioLogado.nome;
+            document.getElementById('dadoEmail').textContent = usuarioLogado.email;
+            document.getElementById('dadoTelefone').textContent = usuarioLogado.telefone;
+
+            if(usuarioLogado.plano) {
+                document.getElementById('semPlano').classList.add('hidden');
+                document.getElementById('dadosPlano').classList.remove('hidden');
+                document.getElementById('nomePlanoAtivo').textContent = usuarioLogado.plano.nome + ' • ' + usuarioLogado.plano.valor;
+                document.getElementById('dataValidade').textContent = usuarioLogado.plano.validade;
+                document.getElementById('ipServidor').textContent = usuarioLogado.plano.ip;
+                document.getElementById('usuarioAcesso').textContent = usuarioLogado.plano.usuario;
+                document.getElementById('senhaAcesso').textContent = usuarioLogado.plano.senhaAcesso;
+                document.getElementById('linkPainel').href = usuarioLogado.plano.linkPainel;
+                document.getElementById('recursosPlano').textContent = usuarioLogado.plano.recursos;
+                document.getElementById('historicoPagamentos').textContent = `✅ Contratação do ${usuarioLogado.plano.nome} confirmada em ${new Date().toLocaleDateString('pt‑BR')}`;
+            } else {
+                document.getElementById('semPlano').classList.remove('hidden');
+                document.getElementById('dadosPlano').classList.add('hidden');
+            }
+        }
+
+        // Sair
+        document.getElementById('btnSair').addEventListener('click', () => {
+            usuarioLogado = null;
+            document.getElementById('area-cliente').classList.add('hidden');
+            document.getElementById('btnEntrar').classList.remove('hidden');
+            document.getElementById('btnCadastrar').classList.remove('hidden');
+            document.getElementById('areaClienteMenu').classList.add('hidden');
+            document.getElementById('btnEntrarMob').classList.remove('hidden');
+            document.getElementById('btnCadastrarMob').classList.remove('hidden');
+            document.getElementById('areaClienteMenuMob').classList.add('hidden');
+            alert('👋 Você saiu da conta.');
+        });
+
+        // Fecha modais clicando fora
+        document.querySelectorAll('.fixed.inset-0').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) fecharModal(modal.id);
+            });
         });
     </script>
 </body>
