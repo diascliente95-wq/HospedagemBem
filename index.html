@@ -14,7 +14,11 @@
                         primary: '#165DFF',
                         secondary: '#36CBCB',
                         dark: '#1E293B',
-                        light: '#F8FAFC'
+                        light: '#F8FAFC',
+                        danger: '#EF4444',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        indigo: '#4F46E5'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -40,6 +44,18 @@
             .form-input {
                 @apply w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
             }
+            .menu-item {
+                @apply flex items-center gap-3 px-4 py-3 rounded-lg transition-custom cursor-pointer;
+            }
+            .menu-item.ativo {
+                @apply bg-primary/10 text-primary font-medium;
+            }
+            .menu-item.desativado {
+                @apply text-gray-400 cursor-not-allowed;
+            }
+            .modulo-conteudo {
+                @apply hidden;
+            }
         }
     </style>
 </head>
@@ -55,7 +71,7 @@
                 <a href="#politicas" class="hover:text-primary transition-custom">Políticas</a>
                 <a href="#contato" class="hover:text-primary transition-custom">Contato</a>
                 <button id="btnEntrar" class="border border-primary text-primary px-5 py-2 rounded-lg hover:bg-primary/5 transition-custom">Entrar</button>
-                <button id="btnCadastrar" class="bg-primary text-white px-5 py-2 rounded-lg hover:bg-primary/90 transition-custom">Cadastrar-se</button>
+                <button id="btnCadastrar" class="bg-primary text-white px-5 py-2 rounded-lg hover:bg-primary/90 transition-custom">Cadastrar‑se</button>
                 <div id="areaClienteMenu" class="hidden">
                     <a href="#area-cliente" class="bg-secondary text-white px-5 py-2 rounded-lg hover:bg-secondary/90 transition-custom">Área do Cliente</a>
                 </div>
@@ -71,7 +87,7 @@
                 <a href="#politicas" class="py-2 hover:text-primary">Políticas</a>
                 <a href="#contato" class="py-2 hover:text-primary">Contato</a>
                 <button id="btnEntrarMob" class="text-left py-2 hover:text-primary">Entrar</button>
-                <button id="btnCadastrarMob" class="text-left py-2 hover:text-primary">Cadastrar-se</button>
+                <button id="btnCadastrarMob" class="text-left py-2 hover:text-primary">Cadastrar‑se</button>
                 <div id="areaClienteMenuMob" class="hidden">
                     <a href="#area-cliente" class="py-2 text-secondary font-semibold">Área do Cliente</a>
                 </div>
@@ -79,7 +95,7 @@
         </div>
     </header>
 
-    <!-- Modais de Cadastro, Login e Área do Cliente -->
+    <!-- Modais de Cadastro, Login e Pagamento -->
     <!-- Modal Cadastro -->
     <div id="modalCadastro" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden p-4">
         <div class="bg-white rounded-xl max-w-md w-full p-6">
@@ -93,7 +109,7 @@
                     <input type="text" id="cadNome" class="form-input" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1">E-mail</label>
+                    <label class="block text-sm font-medium mb-1">E‑mail</label>
                     <input type="email" id="cadEmail" class="form-input" required>
                 </div>
                 <div>
@@ -127,7 +143,7 @@
             </div>
             <form id="formLogin" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium mb-1">E-mail Cadastrado</label>
+                    <label class="block text-sm font-medium mb-1">E‑mail Cadastrado</label>
                     <input type="email" id="logEmail" class="form-input" required>
                 </div>
                 <div>
@@ -141,17 +157,17 @@
                     Entrar na Conta
                 </button>
                 <p class="text-center text-sm text-gray-600">
-                    Ainda não tem conta? <a href="#" id="irCadastro" class="text-primary font-medium hover:underline">Cadastre-se aqui</a>
+                    Ainda não tem conta? <a href="#" id="irCadastro" class="text-primary font-medium hover:underline">Cadastre‑se aqui</a>
                 </p>
             </form>
         </div>
     </div>
 
-    <!-- Modal Pagamento Pix (agora só para usuários logados) -->
+    <!-- Modal Pagamento Pix -->
     <div id="modalPagamento" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden p-4">
         <div class="bg-white rounded-xl max-w-md w-full p-6">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold" id="tituloPlano">Pagamento - Plano</h3>
+                <h3 class="text-xl font-bold" id="tituloPlano">Pagamento ‑ Plano</h3>
                 <button onclick="fecharModal('modalPagamento')" class="text-gray-500 text-xl">&times;</button>
             </div>
             <p class="text-center mb-6">Escaneie o código Pix ou copie o código abaixo. Após confirmação, o plano será liberado diretamente em sua conta.</p>
@@ -186,7 +202,7 @@
                             <li>• Servidor / IP: <span id="ipServidor"></span></li>
                             <li>• Usuário de acesso: <span id="usuarioAcesso"></span></li>
                             <li>• Senha temporária: <span id="senhaAcesso"></span></li>
-                            <li>• Link do Painel de Controle: <a href="#" id="linkPainel" class="text-primary hover:underline">Acessar Painel</a></li>
+                            <li>• Link do Painel de Controle: <a href="#painel-controle" id="abrirPainelBtn" class="text-primary hover:underline font-semibold">Acessar Painel</a></li>
                             <li><strong>💾 Recursos Disponíveis:</strong> <span id="recursosPlano"></span></li>
                         </ul>
                     </div>
@@ -197,7 +213,7 @@
                     <h3 class="font-bold text-lg mb-3">👤 Meus Dados Cadastrais</h3>
                     <ul class="space-y-2 text-gray-700">
                         <li><strong>Nome:</strong> <span id="dadoNome"></span></li>
-                        <li><strong>E-mail:</strong> <span id="dadoEmail"></span></li>
+                        <li><strong>E‑mail:</strong> <span id="dadoEmail"></span></li>
                         <li><strong>Telefone:</strong> <span id="dadoTelefone"></span></li>
                     </ul>
                 </div>
@@ -209,6 +225,269 @@
             <div class="mt-8 text-right">
                 <button id="btnSair" class="bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg hover:bg-red-100 transition-custom">Sair da Conta</button>
             </div>
+        </div>
+    </section>
+
+    <!-- Painel de Controle Completo -->
+    <section id="painel-controle" class="hidden min-h-screen bg-gray-50">
+        <div class="flex h-screen overflow-hidden">
+            <!-- Barra Lateral -->
+            <aside class="w-full md:w-64 bg-white shadow-lg p-4 flex flex-col justify-between">
+                <div>
+                    <div class="text-center mb-8">
+                        <a href="#" class="text-2xl font-bold text-primary">HospedaBem</a>
+                        <p class="text-sm text-gray-600 mt-1">Painel de Controle</p>
+                    </div>
+
+                    <div class="mb-6 p-3 bg-primary/5 rounded-lg">
+                        <p class="text-sm font-medium">Seu Plano:</p>
+                        <p id="nomePlanoPainel" class="font-bold text-lg text-primary">Plano Básico</p>
+                        <p class="text-xs text-gray-600 mt-1">Vencimento: <span id="vencimentoPainel">07/07/2026</span></p>
+                        <span id="statusPlano" class="inline-block mt-2 text-xs font-medium bg-success/10 text-success px-2 py-1 rounded">Ativo ✅</span>
+                    </div>
+
+                    <nav class="space-y-2 mb-8">
+                        <a href="#inicio-painel" class="menu-item ativo" data-modulo="inicio">
+                            <i class="fa fa-tachometer-alt text-lg"></i>
+                            <span>Início</span>
+                        </a>
+                        <a href="#dominios" class="menu-item" data-modulo="dominios">
+                            <i class="fa fa-globe text-lg"></i>
+                            <span>Gerenciar Domínios</span>
+                        </a>
+                        <a href="#arquivos" class="menu-item" data-modulo="arquivos">
+                            <i class="fa fa-folder-open text-lg"></i>
+                            <span>Gerenciador de Arquivos</span>
+                        </a>
+                        <a href="#bancos" class="menu-item" data-modulo="bancos">
+                            <i class="fa fa-database text-lg"></i>
+                            <span>Bancos de Dados</span>
+                        </a>
+                        <a href="#emails" class="menu-item" data-modulo="emails">
+                            <i class="fa fa-envelope text-lg"></i>
+                            <span>Contas de E‑mail</span>
+                        </a>
+                        <a href="#ssl" class="menu-item" data-modulo="ssl">
+                            <i class="fa fa-lock text-lg"></i>
+                            <span>Certificado SSL</span>
+                        </a>
+                        <a href="#backups" class="menu-item" data-modulo="backups">
+                            <i class="fa fa-shield text-lg"></i>
+                            <span>Backup e Restauração</span>
+                        </a>
+                        <a href="#estatisticas" class="menu-item" data-modulo="estatisticas">
+                            <i class="fa fa-bar-chart text-lg"></i>
+                            <span>Estatísticas de Acesso</span>
+                        </a>
+                        <a href="#suporte" class="menu-item" data-modulo="suporte">
+                            <i class="fa fa-headphones text-lg"></i>
+                            <span>Abrir Chamado / Suporte</span>
+                        </a>
+                        <a href="#renovacao" class="menu-item" data-modulo="renovacao">
+                            <i class="fa fa-credit-card-alt text-lg"></i>
+                            <span>Renovar / Alterar Plano</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <div>
+                    <a href="#area-cliente" class="menu-item text-gray-700 hover:bg-gray-100">
+                        <i class="fa fa-arrow-left"></i>
+                        <span>Voltar para Área do Cliente</span>
+                    </a>
+                    <button id="sairPainel" class="menu-item text-danger hover:bg-danger/5 w-full text-left">
+                        <i class="fa fa-sign-out"></i>
+                        <span>Sair</span>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Conteúdo Principal Painel -->
+            <main class="flex-1 overflow-y-auto p-6 md:p-8 w-full">
+                <header class="mb-8 flex justify-between items-center">
+                    <div>
+                        <h1 id="tituloModulo" class="text-[clamp(1.3rem,3vw,1.8rem)] font-bold">Visão Geral</h1>
+                        <p id="descModulo" class="text-gray-600">Acompanhamento do seu serviço e recursos disponíveis</p>
+                    </div>
+                    <div class="hidden md:block">
+                        <p class="text-sm text-gray-600">Bem‑vindo(a), <strong id="nomeClientePainel">Usuário</strong></p>
+                    </div>
+                </header>
+
+                <!-- Módulo Início -->
+                <section id="modulo-inicio" class="">
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow-card p-6 border-t-4 border-secondary">
+                            <i class="fa fa-hdd-o text-3xl text-secondary mb-3"></i>
+                            <h3 class="font-bold text-lg mb-1">Armazenamento</h3>
+                            <p class="text-2xl font-extrabold" id="armazenamentoTotal">10 GB</p>
+                            <p class="text-sm text-gray-600">Usado: <span id="armazenamentoUsado">1,2 GB</span></p>
+                            <div class="w-full h-2 bg-gray-200 rounded-full mt-3 overflow-hidden">
+                                <div id="barraArmazenamento" class="h-full bg-secondary rounded-full" style="width: 12%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-card p-6 border-t-4 border-primary">
+                            <i class="fa fa-exchange text-3xl text-primary mb-3"></i>
+                            <h3 class="font-bold text-lg mb-1">Transferência Mensal</h3>
+                            <p class="text-2xl font-extrabold">Ilimitada</p>
+                            <p class="text-sm text-gray-600">Sem limites de tráfego</p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-card p-6 border-t-4 border-indigo-600">
+                            <i class="fa fa-globe text-3xl text-indigo-600 mb-3"></i>
+                            <h3 class="font-bold text-lg mb-1">Domínios Permitidos</h3>
+                            <p class="text-2xl font-extrabold" id="dominiosMax">1</p>
+                            <p class="text-sm text-gray-600">Cadastrados: <span id="dominiosAtuais">0</span></p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-xl shadow-card p-6">
+                            <h3 class="font-bold text-lg mb-4 text-dark">📡 Dados de Conexão</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li><strong>Servidor / IP:</strong> <span id="ipServidorPainel">servidor01.hospedabem.com.br</span></li>
+                                <li><strong>Acesso FTP / SFTP:</strong> <span id="usuarioFTPPainel">cliente_12345</span></li>
+                                <li><strong>Senha de Acesso:</strong> <span id="senhaAcessoPainel">••••••••</span> <button id="verSenha" class="text-primary text-sm ml-2">Mostrar</button></li>
+                                <li><strong>Endereço do Painel:</strong> <a href="#" class="text-primary hover:underline">painel.hospedabem.com.br</a></li>
+                            </ul>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-card p-6">
+                            <h3 class="font-bold text-lg mb-4 text-dark">📊 Status do Serviço</h3>
+                            <ul class="space-y-3">
+                                <li class="flex justify-between items-center"><span>Funcionamento do Servidor</span><span class="text-success font-medium"><i class="fa fa-check-circle"></i> Operando 99,9%</span></li>
+                                <li class="flex justify-between items-center"><span>Certificado SSL</span><span id="statusSSL" class="text-warning font-medium"><i class="fa fa-clock-o"></i> Aguardando ativação</span></li>
+                                <li class="flex justify-between items-center"><span>Backups Automáticos</span><span id="statusBackup" class="text-success font-medium"><i class="fa fa-check-circle"></i> Semanalmente</span></li>
+                                <li class="flex justify-between items-center"><span>Suporte Disponível</span><span id="nivelSuporte" class="text-primary font-medium">8h às 18h</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="modulo-dominios" class="modulo-conteudo">
+                    <div class="bg-white rounded-xl shadow-card p-6">
+                        <p id="avisoDominio" class="mb-6 text-gray-700"></p>
+                        <button id="btnAdicionarDominio" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium transition-custom">
+                            <i class="fa fa-plus mr-2"></i> Adicionar Novo Domínio
+                        </button>
+                        <div class="mt-8 overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead><tr class="border-b border-gray-200"><th class="pb-3 font-semibold text-gray-600">Domínio</th><th class="pb-3 font-semibold text-gray-600">Tipo</th><th class="pb-3 font-semibold text-gray-600">Status</th><th class="pb-3 font-semibold text-gray-600">Ações</th></tr></thead>
+                                <tbody id="listaDominios"><tr><td colspan="4" class="py-6 text-center text-gray-500">Nenhum domínio cadastrado ainda</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="modulo-arquivos" class="modulo-conteudo">
+                    <div class="bg-white rounded-xl shadow-card p-6 text-center py-12">
+                        <i class="fa fa-folder-open-o text-5xl text-gray-400 mb-4"></i>
+                        <h3 class="font-bold text-xl mb-2">Gerenciador de Arquivos</h3>
+                        <p class="text-gray-600 max-w-xl mx-auto mb-6">Edite, envie, exclua e organize todos os arquivos do seu site diretamente pelo navegador.</p>
+                        <a href="#" class="bg-secondary hover:bg-secondary/90 text-white font-medium px-8 py-3 rounded-lg transition-custom">
+                            <i class="fa fa-external-link mr-2"></i> Abrir Gerenciador Completo
+                        </a>
+                    </div>
+                </section>
+
+                <section id="modulo-bancos" class="modulo-conteudo">
+                    <div id="conteudoBancos">
+                        <div class="bg-white rounded-xl shadow-card p-6 text-center py-12">
+                            <i class="fa fa-database text-5xl text-gray-400 mb-4"></i>
+                            <h3 class="font-bold text-xl mb-2">Funcionalidade Disponível Apenas em Planos Superiores</h3>
+                            <p class="text-gray-600 max-w-xl mx-auto mb-2">No seu plano atual você tem direito a 1 banco de dados. Para bancos ilimitados contrate o Plano Intermediário ou Avançado.</p>
+                            <button class="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-2 rounded-lg mt-2">Fazer Upgrade Agora</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="modulo-emails" class="modulo-conteudo">
+                    <div class="bg-white rounded-xl shadow-card p-6">
+                        <p class="mb-4 text-gray-700">Crie contas de e‑mail profissionais com o seu domínio: <strong>seunome@seusite.com.br</strong></p>
+                        <button class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium transition-custom">
+                            <i class="fa fa-plus mr-2"></i> Criar Nova Conta
+                        </button>
+                    </div>
+                </section>
+
+                <section id="modulo-ssl" class="modulo-conteudo">
+                    <div class="bg-white rounded-xl shadow-card p-6">
+                        <h3 class="font-bold text-lg mb-4 text-dark">Certificado SSL Gratuito</h3>
+                        <p class="mb-6 text-gray-700">Proteja os dados dos visitantes e melhore a segurança e classificação no Google. Emissão e renovação automática.</p>
+                        <button id="btnAtivarSSL" class="bg-success hover:bg-success/90 text-white px-8 py-3 rounded-lg font-medium transition-custom">
+                            <i class="fa fa-lock mr-2"></i> Ativar Certificado Agora
+                        </button>
+                    </div>
+                </section>
+
+                <section id="modulo-backups" class="modulo-conteudo">
+                    <div id="conteudoBackup">
+                        <div class="bg-white rounded-xl shadow-card p-6 text-center py-12">
+                            <i class="fa fa-shield text-5xl text-gray-400 mb-4"></i>
+                            <h3 class="font-bold text-xl mb-2">Backups Diários e Restauração Imediata</h3>
+                            <p class="text-gray-600 max-w-xl mx-auto mb-2">Recurso disponível apenas para os Planos Intermediário e Avançado. No seu plano atual os backups são feitos semanalmente.</p>
+                            <button class="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-2 rounded-lg mt-2">Alterar Meu Plano</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="modulo-estatisticas" class="modulo-conteudo">
+                    <div class="bg-white rounded-xl shadow-card p-6 text-center py-12">
+                        <i class="fa fa-bar-chart text-5xl text-gray-400 mb-4"></i>
+                        <h3 class="font-bold text-xl mb-2">Estatísticas Detalhadas</h3>
+                        <p class="text-gray-600 max-w-xl mx-auto">Visualize visitas, páginas acessadas, origem dos usuários e desempenho do seu site — disponível a partir do Plano Intermediário.</p>
+                    </div>
+                </section>
+
+                <section id="modulo-suporte" class="modulo-conteudo">
+                    <div class="bg-white rounded-xl shadow-card p-6">
+                        <h3 class="font-bold text-lg mb-4 text-dark">Abrir Novo Chamado de Atendimento</h3>
+                        <form class="space-y-4 max-w-xl">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Assunto</label>
+                                <input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ex: Problema para acessar">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Mensagem / Descrição Completa</label>
+                                <textarea rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Descreva detalhadamente sua dúvida ou problema..."></textarea>
+                            </div>
+                            <button type="submit" class="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 rounded-lg transition-custom">
+                                <i class="fa fa-paper-plane mr-2"></i> Enviar Solicitação
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="modulo-renovacao" class="modulo-conteudo">
+                    <div class="bg-white rounded-xl shadow-card p-6">
+                        <h3 class="font-bold text-lg mb-6 text-dark">Gerenciar Assinatura</h3>
+                        <div class="grid md:grid-cols-3 gap-6 mb-8">
+                            <div class="border-2 border-secondary rounded-xl p-5 bg-secondary/5">
+                                <h4 class="font-bold text-lg mb-2">Plano Básico</h4>
+                                <p class="font-extrabold text-xl mb-3">R$ 19,90/mês</p>
+                                <p class="text-sm text-gray-600 mb-4">Ideal para sites pequenos e iniciantes</p>
+                                <button class="w-full bg-secondary text-white py-2 rounded-lg font-medium">Atual ✅</button>
+                            </div>
+                            <div class="border-2 border-primary rounded-xl p-5 hover:shadow-card-hover transition-custom">
+                                <h4 class="font-bold text-lg mb-2">Plano Intermediário</h4>
+                                <p class="font-extrabold text-xl mb-3">R$ 39,90/mês</p>
+                                <p class="text-sm text-gray-600 mb-4">Mais recursos, domínios e suporte 24h</p>
+                                <button class="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg font-medium">Fazer Upgrade</button>
+                            </div>
+                            <div class="border-2 border-indigo-600 rounded-xl p-5 hover:shadow-card-hover transition-custom">
+                                <h4 class="font-bold text-lg mb-2">Plano Avançado</h4>
+                                <p class="font-extrabold text-xl mb-3">R$ 69,90/mês</p>
+                                <p class="text-sm text-gray-600 mb-4">Recursos dedicados e máxima velocidade</p>
+                                <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-medium">Fazer Upgrade</button>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-5">
+                            <h4 class="font-semibold mb-3">💳 Renovar Meu Serviço</h4>
+                            <p class="mb-4">Próximo vencimento: <strong id="dataVencRenovacao">07/07/2026</strong></p>
+                            <button class="bg-success hover:bg-success/90 text-white px-8 py-3 rounded-lg font-medium transition-custom">
+                                <i class="fa fa-credit-card-alt mr-2"></i> Renovar Agora via Pix
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
     </section>
 
@@ -333,7 +612,7 @@
                 <div class="p-6 bg-white rounded-xl shadow-sm hover:shadow-card transition-custom">
                     <i class="fa fa-cog text-3xl text-primary mb-4"></i>
                     <h3 class="font-bold text-lg mb-2">Painel Fácil</h3>
-                    <p class="text-gray-600">Gerencie arquivos, domínios, e-mails e bancos de dados com uma interface simples.</p>
+                    <p class="text-gray-600">Gerencie arquivos, domínios, e‑mails e bancos de dados com uma interface simples.</p>
                 </div>
                 <div class="p-6 bg-white rounded-xl shadow-sm hover:shadow-card transition-custom">
                     <i class="fa fa-headphones text-3xl text-primary mb-4"></i>
@@ -353,7 +632,7 @@
                 <h3 class="font-bold text-xl mb-3 text-primary">📄 Termos de Serviço</h3>
                 <div class="text-gray-700 space-y-3 text-sm md:text-base">
                     <p><strong>1. Aceitação dos Termos:</strong> Ao contratar nossos serviços, você concorda integralmente com todas as condições aqui descritas. O uso do serviço implica aceitação total.</p>
-                    <p><strong>2. Descrição do Serviço:</strong> Oferecemos hospedagem de sites, armazenamento e recursos relacionados. Reservamo-nos o direito de ajustar configurações para manter estabilidade e segurança.</p>
+                    <p><strong>2. Descrição do Serviço:</strong> Oferecemos hospedagem de sites, armazenamento e recursos relacionados. Reservamo‑nos o direito de ajustar configurações para manter estabilidade e segurança.</p>
                     <p><strong>3. Obrigações do Usuário:</strong> É proibido utilizar nossos servidores para armazenar ou distribuir conteúdo ilegal, ofensivo, que viole direitos autorais ou que sobrecarregue indevidamente os recursos do sistema.</p>
                     <p><strong>4. Pagamentos e Renovação:</strong> O pagamento é feito exclusivamente via Pix. A contratação é mensal ou anual, conforme escolhido. A renovação deve ser feita até 24 horas antes do vencimento para evitar suspensão.</p>
                     <p><strong>5. Cancelamento e Reembolso:</strong> Você pode cancelar a qualquer momento. Oferecemos garantia de 7 dias: se não estiver satisfeito, devolvemos 100% do valor pago, sem burocracia.</p>
@@ -364,273 +643,4 @@
             <div class="mb-10">
                 <h3 class="font-bold text-xl mb-3 text-primary">🔒 Política de Privacidade e Proteção de Dados</h3>
                 <div class="text-gray-700 space-y-3 text-sm md:text-base">
-                    <p>Em conformidade com a <strong>LGPD - Lei Geral de Proteção de Dados (Lei nº 13.709/2018)</strong>, garantimos total segurança e sigilo das suas informações pessoais e dados de acesso.</p>
-                    <p><strong>Coleta de Dados:</strong> Coletamos apenas informações necessárias para contratação, cobrança e suporte: nome, e-mail, telefone e dados de contato. Nunca compartilhamos com terceiros sem autorização expressa.</p>
-                    <p><strong>Uso das Informações:</strong> Utilizamos seus dados apenas para execução do serviço, comunicação oficial e envio de avisos importantes. Você pode solicitar consulta, alteração ou exclusão dos dados a qualquer momento.</p>
-                    <p><strong>Segurança:</strong> Utilizamos criptografia avançada, controle rigoroso de acessos e monitoramento contínuo para evitar acesso indevido, perda ou alteração indevida de dados.</p>
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <h3 class="font-bold text-xl mb-3 text-primary">💳 Política de Pagamentos e Reembolsos</h3>
-                <div class="text-gray-700 space-y-3 text-sm md:text-base">
-                    <p><strong>Forma de Pagamento:</strong> Aceitamos exclusivamente pagamento via Pix, forma rápida, segura e fiscalmente regularizada. O valor é definido conforme o plano escolhido.</p>
-                    <p><strong>Confirmação e Liberação:</strong> Após identificação automática da transação, o sistema libera o acesso imediatamente, enviando todos os dados também para sua Área do Cliente.</p>
-                    <p><strong>Reembolso:</strong> Nos primeiros 7 dias corridos após contratação, devolvemos integralmente o valor pago se solicitado por meio do canal oficial de atendimento. Após esse período, devoluções são analisadas caso a caso.</p>
-                    <p><strong>Atraso:</strong> Pagamentos não efetuados até a data de vencimento geram aviso, depois suspensão e após 7 dias de suspensão, exclusão definitiva dos dados, sem obrigação de manter cópias.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seção Contato -->
-    <section id="contato" class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4 max-w-4xl text-center">
-            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold mb-6">Entre em Contato Conosco</h2>
-            <p class="mb-8 text-gray-600">Tem dúvidas? Nossa equipe está pronta para ajudar!</p>
-            <div class="space-y-4 text-lg">
-                <p><i class="fa fa-envelope text-primary mr-3"></i> atendimento@hospedabem.com.br</p>
-                <p><i class="fa fa-whatsapp text-green-600 mr-3"></i> (91) 98888‑7777</p>
-                <p><i class="fa fa-map-marker text-red-500 mr-3"></i> Belém - Pará - Brasil</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Rodapé -->
-    <footer class="bg-dark text-gray-300 py-10">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <h4 class="text-xl font-bold text-white mb-4">HospedaBem</h4>
-                    <p>Soluções confiáveis em hospedagem de sites para todo o Brasil, com pagamento facilitado e suporte próximo.</p>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white mb-4">Links Úteis</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#inicio" class="hover:text-white transition-custom">Início</a></li>
-                        <li><a href="#planos" class="hover:text-white transition-custom">Planos</a></li>
-                        <li><a href="#politicas" class="hover:text-white transition-custom">Políticas e Termos</a></li>
-                        <li><a href="#contato" class="hover:text-white transition-custom">Contato</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white mb-4">Contato</h4>
-                    <ul class="space-y-2">
-                        <li><i class="fa fa-envelope mr-2"></i> atendimento@hospedabem.com.br</li>
-                        <li><i class="fa fa-phone mr-2"></i> (91) 9XXXX‑XXXX</li>
-                        <li><i class="fa fa-map-marker mr-2"></i> Belém - Pará - Brasil</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white mb-4">Pagamento</h4>
-                    <p>Aceitamos apenas Pix, liberação automática e segurança garantida em todas as transações.</p>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 pt-6 text-center text-sm">
-                <p>&copy; 2026 HospedaBem - Todos os direitos reservados. Serviços regidos pelas leis brasileiras e LGPD.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script>
-        // Variáveis globais
-        let usuarioLogado = null;
-        let planoEscolhido = '';
-
-        // Menu móvel
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
-        menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-
-        function fecharModal(idModal) {
-            document.getElementById(idModal).classList.add('hidden');
-        }
-
-        function abrirModal(idModal) {
-            document.getElementById(idModal).classList.remove('hidden');
-            mobileMenu.classList.add('hidden');
-        }
-
-        // Botões abrir modais
-        document.getElementById('btnCadastrar').addEventListener('click', () => abrirModal('modalCadastro'));
-        document.getElementById('btnCadastrarMob').addEventListener('click', () => abrirModal('modalCadastro'));
-        document.getElementById('btnEntrar').addEventListener('click', () => abrirModal('modalLogin'));
-        document.getElementById('btnEntrarMob').addEventListener('click', () => abrirModal('modalLogin'));
-        document.getElementById('irCadastro').addEventListener('click', (e) => {
-            e.preventDefault();
-            fecharModal('modalLogin');
-            abrirModal('modalCadastro');
-        });
-
-        // Cadastro
-        document.getElementById('formCadastro').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nome = document.getElementById('cadNome').value.trim();
-            const email = document.getElementById('cadEmail').value.trim();
-            const telefone = document.getElementById('cadTelefone').value.trim();
-            const senha = document.getElementById('cadSenha').value;
-            const confSenha = document.getElementById('cadConfSenha').value;
-
-            if(senha !== confSenha) return alert('⚠️ As senhas não coincidem!');
-
-            // Salva no navegador (em produção usar banco de dados)
-            const novoUsuario = { nome, email, telefone, senha, plano: null, dadosAcesso: null };
-            localStorage.setItem(`usuario_${email}`, JSON.stringify(novoUsuario));
-
-            alert('✅ Cadastro realizado com sucesso! Agora faça login para continuar.');
-            fecharModal('modalCadastro');
-            abrirModal('modalLogin');
-            this.reset();
-        });
-
-        // Login
-        document.getElementById('formLogin').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('logEmail').value.trim();
-            const senha = document.getElementById('logSenha').value;
-
-            const dadosSalvos = localStorage.getItem(`usuario_${email}`);
-            if(!dadosSalvos) return alert('❌ E-mail não cadastrado!');
-
-            const usuario = JSON.parse(dadosSalvos);
-            if(usuario.senha !== senha) return alert('❌ Senha incorreta!');
-
-            usuarioLogado = usuario;
-            alert(`✅ Bem-vindo(a), ${usuario.nome}!`);
-            fecharModal('modalLogin');
-            atualizarInterfaceLogado();
-            exibirAreaCliente();
-            this.reset();
-
-            // Se já tinha escolhido plano antes do login
-            if(planoEscolhido) abrirPagamento(planoEscolhido);
-        });
-
-        // Verifica se está logado antes de pagar
-        function verificarLogin(plano) {
-            planoEscolhido = plano;
-            if(!usuarioLogado) {
-                alert('ℹ️ Você precisa estar cadastrado e logado para contratar.');
-                abrirModal('modalLogin');
-                return;
-            }
-            abrirPagamento(plano);
-        }
-
-        function abrirPagamento(plano) {
-            const nomesPlanos = {
-                basico: 'Plano Básico - R$ 19,90/mês',
-                intermediario: 'Plano Intermediário - R$ 39,90/mês',
-                avancado: 'Plano Avançado - R$ 69,90/mês'
-            };
-            tituloPlano.textContent = `Pagamento - ${nomesPlanos[plano]}`;
-            abrirModal('modalPagamento');
-        }
-
-        function copiarCodigo() {
-            const codigo = document.getElementById('codigoPix').textContent;
-            navigator.clipboard.writeText(codigo);
-            alert('✅ Código Pix copiado com sucesso!');
-        }
-
-        function confirmarPagamento() {
-            // Dados gerados automaticamente após confirmação
-            const dadosPlanos = {
-                basico: {
-                    nome: 'Plano Básico',
-                    valor: 'R$ 19,90/mês',
-                    validade: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR'),
-                    ip: 'servidor01.hospedabem.com.br',
-                    usuario: 'cliente_' + Math.floor(Math.random()*99999),
-                    senhaAcesso: Math.random().toString(36).slice(-8).toUpperCase(),
-                    linkPainel: 'https://painel.hospedabem.com.br',
-                    recursos: '10GB SSD • Transferência ilimitada • 1 domínio'
-                },
-                intermediario: {
-                    nome: 'Plano Intermediário',
-                    valor: 'R$ 39,90/mês',
-                    validade: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR'),
-                    ip: 'servidor02.hospedabem.com.br',
-                    usuario: 'cliente_' + Math.floor(Math.random()*99999),
-                    senhaAcesso: Math.random().toString(36).slice(-8).toUpperCase(),
-                    linkPainel: 'https://painel.hospedabem.com.br',
-                    recursos: '50GB SSD • Transferência ilimitada • Até 5 domínios'
-                },
-                avancado: {
-                    nome: 'Plano Avançado',
-                    valor: 'R$ 69,90/mês',
-                    validade: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('pt-BR'),
-                    ip: 'servidor03.hospedabem.com.br',
-                    usuario: 'cliente_' + Math.floor(Math.random()*99999),
-                    senhaAcesso: Math.random().toString(36).slice(-8).toUpperCase(),
-                    linkPainel: 'https://painel.hospedabem.com.br',
-                    recursos: '150GB SSD • Domínios ilimitados • Recursos dedicados'
-                }
-            };
-
-            usuarioLogado.plano = dadosPlanos[planoEscolhido];
-            // Atualiza dados salvos
-            localStorage.setItem(`usuario_${usuarioLogado.email}`, JSON.stringify(usuarioLogado));
-
-            alert('✅ Pagamento confirmado! Plano ativado. Todos os dados já estão disponíveis em sua Área do Cliente e enviados por e-mail.');
-            fecharModal('modalPagamento');
-            exibirAreaCliente();
-            planoEscolhido = '';
-        }
-
-        function atualizarInterfaceLogado() {
-            document.getElementById('btnEntrar').classList.add('hidden');
-            document.getElementById('btnCadastrar').classList.add('hidden');
-            document.getElementById('areaClienteMenu').classList.remove('hidden');
-            document.getElementById('btnEntrarMob').classList.add('hidden');
-            document.getElementById('btnCadastrarMob').classList.add('hidden');
-            document.getElementById('areaClienteMenuMob').classList.remove('hidden');
-        }
-
-        function exibirAreaCliente() {
-            document.getElementById('area-cliente').classList.remove('hidden');
-            document.getElementById('nomeUsuario').textContent = usuarioLogado.nome.split(' ')[0];
-            document.getElementById('dadoNome').textContent = usuarioLogado.nome;
-            document.getElementById('dadoEmail').textContent = usuarioLogado.email;
-            document.getElementById('dadoTelefone').textContent = usuarioLogado.telefone;
-
-            if(usuarioLogado.plano) {
-                document.getElementById('semPlano').classList.add('hidden');
-                document.getElementById('dadosPlano').classList.remove('hidden');
-                document.getElementById('nomePlanoAtivo').textContent = usuarioLogado.plano.nome + ' • ' + usuarioLogado.plano.valor;
-                document.getElementById('dataValidade').textContent = usuarioLogado.plano.validade;
-                document.getElementById('ipServidor').textContent = usuarioLogado.plano.ip;
-                document.getElementById('usuarioAcesso').textContent = usuarioLogado.plano.usuario;
-                document.getElementById('senhaAcesso').textContent = usuarioLogado.plano.senhaAcesso;
-                document.getElementById('linkPainel').href = usuarioLogado.plano.linkPainel;
-                document.getElementById('recursosPlano').textContent = usuarioLogado.plano.recursos;
-                document.getElementById('historicoPagamentos').textContent = `✅ Contratação do ${usuarioLogado.plano.nome} confirmada em ${new Date().toLocaleDateString('pt‑BR')}`;
-            } else {
-                document.getElementById('semPlano').classList.remove('hidden');
-                document.getElementById('dadosPlano').classList.add('hidden');
-            }
-        }
-
-        // Sair
-        document.getElementById('btnSair').addEventListener('click', () => {
-            usuarioLogado = null;
-            document.getElementById('area-cliente').classList.add('hidden');
-            document.getElementById('btnEntrar').classList.remove('hidden');
-            document.getElementById('btnCadastrar').classList.remove('hidden');
-            document.getElementById('areaClienteMenu').classList.add('hidden');
-            document.getElementById('btnEntrarMob').classList.remove('hidden');
-            document.getElementById('btnCadastrarMob').classList.remove('hidden');
-            document.getElementById('areaClienteMenuMob').classList.add('hidden');
-            alert('👋 Você saiu da conta.');
-        });
-
-        // Fecha modais clicando fora
-        document.querySelectorAll('.fixed.inset-0').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if(e.target === modal) fecharModal(modal.id);
-            });
-        });
-    </script>
-</body>
-</html>
+                    <p><strong>1. Coleta
